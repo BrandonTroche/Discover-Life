@@ -1,0 +1,6 @@
+platform :ios, '11.4'
+
+target 'Discover Life' do
+  use_frameworks!
+ 
+end

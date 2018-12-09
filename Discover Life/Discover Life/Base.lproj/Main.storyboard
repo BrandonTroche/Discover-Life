@@ -64,7 +64,7 @@
                                 <state key="normal" title="Log In"/>
                                 <connections>
                                     <action selector="loginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DOt-kU-2Wd"/>
-                                    <segue destination="if9-KM-JI8" kind="show" id="EZ0-hw-S9c"/>
+                                    <segue destination="WEl-AN-Q4H" kind="show" id="yat-OK-tiv"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vfw-td-syy">
@@ -73,7 +73,7 @@
                                 <state key="normal" title="Sign Up"/>
                                 <connections>
                                     <action selector="signupAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i9x-4Z-lPt"/>
-                                    <segue destination="if9-KM-JI8" kind="show" id="Qb7-cD-V4f"/>
+                                    <segue destination="WEl-AN-Q4H" kind="show" id="o0j-5t-sfg"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -90,19 +90,19 @@
             <point key="canvasLocation" x="32.799999999999997" y="67.916041979010501"/>
         </scene>
         <!--View Controller-->
-        <scene sceneID="cYH-Sw-WHv">
+        <scene sceneID="uZ2-Qn-rSv">
             <objects>
-                <viewController id="if9-KM-JI8" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="G8r-jS-gXR">
+                <viewController id="WEl-AN-Q4H" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R2O-o6-bYe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="xx5-eX-ZEK"/>
+                        <viewLayoutGuide key="safeArea" id="YSw-KZ-dR5"/>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DWh-UO-FiE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qt9-XO-9Vk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="817" y="68"/>
+            <point key="canvasLocation" x="758" y="68"/>
         </scene>
     </scenes>
     <resources>
@@ -113,6 +113,6 @@
         <image name="microsoft-powerpoint-templates-blue-curved-banner-template-pertaining-to-template-design-background-blue" width="512" height="384"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Qb7-cD-V4f"/>
+        <segue reference="yat-OK-tiv"/>
     </inferredMetricsTieBreakers>
 </document>
