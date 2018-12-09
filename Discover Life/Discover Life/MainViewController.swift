@@ -64,13 +64,13 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             
             if let placemark = placemarks?[0] {
                 print("")
-                print(placemark.region)
+                print(placemark.region!)
                 print("")
-                print(placemark.locality)
+                print(placemark.locality!)
                 print("")
-                print(placemark.subLocality)
+                print(placemark.subLocality!)
                 print("")
-                print(placemark.country)
+                print(placemark.country!)
                 print("")
             }
             

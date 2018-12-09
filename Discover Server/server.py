@@ -22,11 +22,34 @@ longitude = 0.0
 
 @app.route('/user', methods=['POST'])
 def user():
-    pass
+    data_json = json.loads(request.data)
+    username = data_json['username']
 
-@app.route('/new_user', methods=['POST', 'GET'])
+    if(collection_users.find_one({"username" : data_json["username"], "password": data_json["password"]})):
+        user_object = collection_users.find_one({"username" : data_json["username"], "password": data_json["password"]})
+
+        return_model = '{"username":"'+user_object['username']+'", "password": "'+user_object['password']+'"}'
+
+        print(return_model)
+
+        return(return_model, 200)
+    else:
+        print("not found")
+        return('{"status_code":400}', 400)
+
+@app.route('/new_user', methods=['POST'])
 def new_user():
-    pass
+    data = json.loads(request.data)
+    
+    if(collection_users.find_one({"username": data['username']})):
+        print("found")
+        return('{"status_code":400}', 400)
+    else:
+        print("not found")
+        collection_users.insert_one(data)
+        return('{"status_code":200}', 200)
+
+    return('{"status_code":400}', 400)
 
 @app.route('/location', methods=['POST'])
 def location():
