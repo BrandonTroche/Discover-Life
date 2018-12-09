@@ -161,9 +161,31 @@ def currency_healthcheck():
 
 @app.route('/currency/exchangerate', methods=['GET'])
 def currency_exchangerate():
-    headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_CURRENCYCONVERSION_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
-    response_body = requests.get('https://api.discover.com/dci/currencyconversion/v1/exchangerate', headers = headers)
-    return(json.dumps(response_body.text), 200)
+
+    headers = {
+        'Authorization' : 'Basic bDd4eGFkYTY5ZjdiMmEwNzQ1YjJiNTY3MTViN2YxYmViMGMxOjY2OGJjYzdmOTFhMjRkODBiNjhkM2U0MGUzOTI5NjJj',
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Cache-Control': 'no-cache'
+    }
+
+    payload = "grant_type=client_credentials&scope=DCI_CURRENCYCONVERSION"
+
+    res = requests.post("https://apis.discover.com/auth/oauth/v2/token", data = payload, headers = headers)
+
+    red_data = json.loads(res.text)
+
+    print(red_data)
+
+    token = red_data["access_token"]
+
+    # GBP
+    # USD
+
+    headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_CURRENCYCONVERSION_SANDBOX',  'Authorization':'Bearer '+token  }
+    response_body = requests.get('https://api.discover.com/dci/currencyconversion/v1/exchangerate?currencycd=GBP', headers = headers)
+    dat = json.loads(response_body.text)
+    print(dat)
+    return('{"exchangerate":"' + str(dat["exchange_rate"]) + '"}', 200)
 
 @app.route('/currency/languages', methods=['GET'])
 def currency_languages():

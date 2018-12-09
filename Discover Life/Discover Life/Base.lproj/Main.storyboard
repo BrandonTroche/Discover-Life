@@ -242,6 +242,9 @@
                     <tabBarItem key="tabBarItem" systemItem="featured" id="9Mo-kQ-tv7">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
+                    <connections>
+                        <outlet property="tableView" destination="8ui-hm-PhG" id="8Bd-b2-tWj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BbD-Dl-obx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

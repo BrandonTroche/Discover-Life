@@ -89,6 +89,11 @@ class EventViewController: UIViewController, CLLocationManagerDelegate, UIPicker
         toolbar.setItems([flexSpace, doneBtn], animated: false)
         toolbar.sizeToFit()
         
+        self.eventNameTextField.inputAccessoryView = toolbar
+        self.costTextField.inputAccessoryView = toolbar
+        self.startTime.inputAccessoryView = toolbar
+        self.endTime.inputAccessoryView = toolbar
+        
         self.locationPicker.delegate = self
         self.locationPicker.dataSource = self
         
