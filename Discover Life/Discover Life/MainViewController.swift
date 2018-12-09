@@ -53,7 +53,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: self.view.frame.size.width, height: 30))
         //create left side empty space so that done button set on right side
         let flexSpace = UIBarButtonItem(barButtonSystemItem:    .flexibleSpace, target: nil, action: nil)
-        let doneBtn: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doNothing))
+        let doneBtn: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
         toolbar.setItems([flexSpace, doneBtn], animated: false)
         toolbar.sizeToFit()
         
@@ -72,9 +72,97 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
                 print("")
                 print(placemark.country!)
                 print("")
+                
+                let URLString = "https://a9a20ecc.ngrok.io/location"
+                
+                Alamofire.request(URLString, method: .post, parameters: ["latitude": self.locationManager.location?.coordinate.latitude as Any, "longitude": self.locationManager.location?.coordinate.longitude as Any, "city": placemark.locality!], encoding: JSONEncoding.default, headers: nil).responseString { response in
+
+                    switch response.result {
+                    case .success:
+                        if let result = response.result.value {
+                            print("")
+                            print("")
+                            print("")
+//                            var newString = result.replacingOccurrences(of: "[", with: "")
+//                            newString = newString.replacingOccurrences(of: "]", with: "")
+//                            newString = newString.replacingOccurrences(of: "\"", with: "")
+//                            newString = newString.replacingOccurrences(of: "'", with: "\"")
+//                            print(newString)
+                            print(result)
+                            print("")
+                            var dictonary:NSDictionary?
+                            
+                            if let data = result.data(using: String.Encoding.utf8) {
+
+                                do {
+                                    dictonary = try JSONSerialization.jsonObject(with: data, options: []) as? [String:AnyObject] as NSDictionary?
+                                    
+                                    if let myDictionary = dictonary{
+                                        for x in dictonary! {
+                                            
+                                            print("dict")
+                                            
+                                            var newS = x.value as! String
+                                            newS = newS.replacingOccurrences(of: "'", with: "\"")
+                                            
+                                            print(newS)
+                                            
+                                            var newD:NSDictionary?
+                                            
+                                            if let newData = newS.data(using: String.Encoding.utf8) {
+                                                do {
+                                                    newD = try JSONSerialization.jsonObject(with: newData, options: []) as? [String:AnyObject] as NSDictionary?
+                                                    
+                                                    print(newD!["hotel_name"])
+                                                    let coord = CLLocationCoordinate2D(latitude: newD!["latitude"]! as! CLLocationDegrees, longitude: newD!["longitude"]! as! CLLocationDegrees)
+                                                    
+                                                    let ann = MGLPointAnnotation() //RideAnnotation(coordinate: coord, title: "Ride", subtitle: "This is my ride")
+                                                    ann.coordinate = coord
+                                                    ann.title = "This is an Event"
+                                                    
+                                                    //Add that annotation to the MapBox map
+                                                    self.mapView.addAnnotation(ann)
+                                                }
+                                            }
+                                            
+                                        }
+                                    }
+
+//                                    if let myDictionary = dictonary
+//                                    {
+////                                        print(" First name is: \(myDictionary["latitude"]!)")
+//
+//                                        let coord = CLLocationCoordinate2D(latitude: myDictionary["latitude"]! as! CLLocationDegrees, longitude: myDictionary["longitude"]! as! CLLocationDegrees)
+//
+//                                        let ann = MGLPointAnnotation() //RideAnnotation(coordinate: coord, title: "Ride", subtitle: "This is my ride")
+//                                        ann.coordinate = coord
+//                                        ann.title = "This is my ride"
+//
+//                                        //Add that annotation to the MapBox map
+//                                        self.mapView.addAnnotation(ann)
+//                                    }
+                                } catch let error as NSError {
+                                    print(error)
+                                }
+                            }
+                            print("")
+                            // self.rowText = (JSON["Latitude"] as! String) + (JSON["Longitude"] as! String)
+                        }
+                        print("pass")
+//                        UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
+//                        UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
+
+                    case .failure(let error):
+                        print(error)
+                    }
+
+                }
+                
             }
             
         }
+        
+        
         
     }
     
@@ -95,14 +183,32 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         mapView.setUserTrackingMode(.follow, animated: false)
         
         mapView.zoomLevel = 12
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        
+        print("")
+        print("")
+        print("")
+        print(hour, minutes)
+        print("")
+        print("")
+        print("")
+        print(date)
+        print("")
+        print("")
+        print("")
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         view.willRemoveSubview(mapView)
     }
     
-    @objc func doNothing(){
-        print("")
+    @objc func doneButtonAction() {
+        self.view.endEditing(true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -111,6 +217,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
     }
 
 }
+
+//let date = Date()
+//let calendar = Calendar.current
+//let hour = calendar.component(.hour, from: date)
+//let minutes = calendar.component(.minute, from: date)
+
 //let myCities = Cities()
 //
 ////        print(myCities.cities["result"]!)

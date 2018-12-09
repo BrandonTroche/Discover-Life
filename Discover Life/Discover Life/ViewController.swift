@@ -22,7 +22,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         if emailTextField.text! == "" || passwordTextField.text! == "" {
             print("nothing entered")
         } else {
-            let URLString = "https://055d202e.ngrok.io/user"
+            let URLString = "https://a9a20ecc.ngrok.io/user"
             
             Alamofire.request(URLString, method: .post, parameters: ["latitude": self.locationManager.location?.coordinate.latitude as Any, "longitude": self.locationManager.location?.coordinate.longitude as Any, "username": emailTextField.text!, "password": passwordTextField.text!], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
                 
@@ -35,6 +35,8 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                         self.performSegue(withIdentifier: "authSegue", sender: self)
                     }
                     print("pass")
+                    UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
+                    UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
                     
                 case .failure(let error):
                     print(error)
@@ -46,7 +48,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     
     @IBAction func signupAction(_ sender: UIButton) {
         
-        let URLString = "https://055d202e.ngrok.io/new_user"
+        let URLString = "https://a9a20ecc.ngrok.io/new_user"
         
         Alamofire.request(URLString, method: .post, parameters: ["latitude": self.locationManager.location?.coordinate.latitude as Any, "longitude": self.locationManager.location?.coordinate.longitude as Any, "username": emailTextField.text!, "password": passwordTextField.text!], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
             
@@ -59,6 +61,8 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                     self.performSegue(withIdentifier: "authSegue", sender: self)
                 }
                 print("pass")
+                UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
+                UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
                 
             case .failure(let error):
                 print(error)
@@ -72,8 +76,29 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        // Do any additional setup after loading the view, typically from a nib.
         
+        //init toolbar
+        let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: self.view.frame.size.width, height: 30))
+        //create left side empty space so that done button set on right side
+        let flexSpace = UIBarButtonItem(barButtonSystemItem:    .flexibleSpace, target: nil, action: nil)
+        let doneBtn: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+        toolbar.setItems([flexSpace, doneBtn], animated: false)
+        toolbar.sizeToFit()
+        
+        self.emailTextField.inputAccessoryView = toolbar
+        self.passwordTextField.inputAccessoryView = toolbar
+        // Do any additional setup after loading the view, typically from a nib.
+        if UserDefaults.standard.string(forKey: "email") != nil{
+            emailTextField.text! = UserDefaults.standard.string(forKey: "email")!
+        }
+        if UserDefaults.standard.string(forKey: "password") != nil{
+            passwordTextField.text! = UserDefaults.standard.string(forKey: "password")!
+        }
+        
+    }
+    
+    @objc func doneButtonAction() {
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {

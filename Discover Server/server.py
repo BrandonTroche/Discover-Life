@@ -11,7 +11,7 @@ app = Flask(__name__, template_folder="templates")
 app.debug = True 
 app.secret_key = "sjfavnjtlieniovnoiv90tn2u4"
 
-client = MongoClient('mongodb://brandon:password@ds129484.mlab.com:29484/discoverlife')
+client = MongoClient('mongodb://brandon:password1@ds129484.mlab.com:29484/discoverlife')
 db = client['discoverlife']
 
 collection_users = db.users
@@ -40,7 +40,7 @@ def user():
 @app.route('/new_user', methods=['POST'])
 def new_user():
     data = json.loads(request.data)
-    
+
     if(collection_users.find_one({"username": data['username']})):
         print("found")
         return('{"status_code":400}', 400)
@@ -53,8 +53,22 @@ def new_user():
 
 @app.route('/location', methods=['POST'])
 def location():
-    pass
 
+    data = json.loads(request.data)
+
+    print(data)
+
+    ret = {'res': []}
+
+    if(collection_events.find_one({"city":data["city"]})):
+        all_in_city = collection_events.find({"city":data["city"]})
+        for event in all_in_city:
+            event["_id"] = "none"
+            # ret[event["event_id"]] = str(event)
+            ret['res'].append(str(event))
+            # ret.append(str(event))
+        return(json.dumps(ret))
+    return('{"status_code":400}', 400)
 
 @app.route('/check_events', methods=['GET'])
 def check_events():
@@ -67,67 +81,67 @@ def cityguides_merchants():
     return(json.dumps(response_body.text), 200)
 
 @app.route('/cityguides/healthcheck', methods=['GET'])
-def cityguides_merchants():
+def cityguides_healthcheck():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'CITYGUIDES_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/cityguides/v2/healthcheck', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/cityguides/categories', methods=['GET'])
-def cityguides_merchants():
+def cityguides_categories():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'CITYGUIDES_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/cityguides/v2/categories', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/atm/healthcheck', methods=['GET'])
-def cityguides_merchants():
+def atm_healthcheck():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_ATM_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/atm/v1/healthcheck', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/atm/locations', methods=['GET'])
-def cityguides_merchants():
+def atm_locations():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_ATM_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/atm/v1/locations', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/tip/healthcheck', methods=['GET'])
-def cityguides_merchants():
+def tip_healthcheck():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_TIPETIQUETTE_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/tip/v1/healthcheck', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/tip/guide', methods=['GET'])
-def cityguides_merchants():
+def tip_guide():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_TIPETIQUETTE_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/tip/v1/guide', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/currency/healthcheck', methods=['GET'])
-def cityguides_merchants():
+def currency_healthcheck():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_CURRENCYCONVERSION_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/currencyconversion/v1/healthcheck', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/currency/exchangerate', methods=['GET'])
-def cityguides_merchants():
+def currency_exchangerate():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_CURRENCYCONVERSION_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/currencyconversion/v1/exchangerate', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/currency/languages', methods=['GET'])
-def cityguides_merchants():
+def currency_languages():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_CURRENCYCONVERSION_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci/currencyconversion/v1/languages', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/offers/healthcheck', methods=['GET'])
-def cityguides_merchants():
+def offers_healthcheck():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCIOFFERS_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci-offers/v2/healthcheck', headers = headers)
     return(json.dumps(response_body.text), 200)
 
 @app.route('/offers/offers', methods=['GET'])
-def cityguides_merchants():
+def offers_offers():
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCIOFFERS_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/dci-offers/v2/offers', headers = headers)
     return(json.dumps(response_body.text), 200)
