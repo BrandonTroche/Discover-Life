@@ -15,6 +15,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     
     @IBAction func loginAction(_ sender: UIButton) {
+        if emailTextField.text! == "" || passwordTextField.text! == "" {
+            print("nothing entered")
+        } else {
+            performSegue(withIdentifier: "authSegue", sender: self)
+        }
     }
     
     @IBAction func signupAction(_ sender: UIButton) {

@@ -84,12 +84,12 @@
 			children = (
 				CAE98DD721BC72F0001711B0 /* AppDelegate.swift */,
 				CAE98DD921BC72F0001711B0 /* ViewController.swift */,
+				CAE98DEB21BC83C7001711B0 /* MainViewController.swift */,
 				CAE98DDB21BC72F0001711B0 /* Main.storyboard */,
 				CAE98DDE21BC72F2001711B0 /* Assets.xcassets */,
 				CAE98DE021BC72F2001711B0 /* LaunchScreen.storyboard */,
 				CAE98DE321BC72F2001711B0 /* Info.plist */,
 				CAE98DE921BC73C8001711B0 /* Cities.swift */,
-				CAE98DEB21BC83C7001711B0 /* MainViewController.swift */,
 			);
 			path = "Discover Life";
 			sourceTree = "<group>";
@@ -186,8 +186,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Discover Life/Pods-Discover Life-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
@@ -206,8 +204,6 @@
 				"${BUILT_PRODUCTS_DIR}/Turf/Turf.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",

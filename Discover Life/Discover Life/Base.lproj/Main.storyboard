@@ -64,7 +64,6 @@
                                 <state key="normal" title="Log In"/>
                                 <connections>
                                     <action selector="loginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DOt-kU-2Wd"/>
-                                    <segue destination="WEl-AN-Q4H" kind="show" id="yat-OK-tiv"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vfw-td-syy">
@@ -73,7 +72,6 @@
                                 <state key="normal" title="Sign Up"/>
                                 <connections>
                                     <action selector="signupAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i9x-4Z-lPt"/>
-                                    <segue destination="WEl-AN-Q4H" kind="show" id="o0j-5t-sfg"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -83,17 +81,18 @@
                     <connections>
                         <outlet property="emailTextField" destination="zaE-nv-dfm" id="Kj6-e5-Jfx"/>
                         <outlet property="passwordTextField" destination="cyq-gu-FJg" id="1LC-fu-RMG"/>
+                        <segue destination="WEl-AN-Q4H" kind="show" identifier="authSegue" id="tRe-0g-qrx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="32.799999999999997" y="67.916041979010501"/>
         </scene>
-        <!--View Controller-->
+        <!--Main View Controller-->
         <scene sceneID="uZ2-Qn-rSv">
             <objects>
-                <viewController id="WEl-AN-Q4H" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="R2O-o6-bYe">
+                <viewController id="WEl-AN-Q4H" customClass="MainViewController" customModule="Discover_Life" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R2O-o6-bYe" customClass="Main">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -112,7 +111,4 @@
         <image name="icon-384x384" width="192" height="192"/>
         <image name="microsoft-powerpoint-templates-blue-curved-banner-template-pertaining-to-template-design-background-blue" width="512" height="384"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="yat-OK-tiv"/>
-    </inferredMetricsTieBreakers>
 </document>
