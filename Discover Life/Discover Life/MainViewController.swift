@@ -15,9 +15,26 @@ import MapboxDirections
 import MapboxGeocoder
 import CoreLocation
 
-class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate {
+class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    let cellContent = ["1", "222", "33", "444", "5", "6", "7", "8", "9", "10"]
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cell")
+        
+        cell.textLabel?.text = cellContent[indexPath.row]
+        
+        return cell
+    }
+    
     
     var locationManager = CLLocationManager()
+    
+    let geocoder = CLGeocoder()
     
     //MapBox navigation view
     var mapView: NavigationMapView!
@@ -40,6 +57,25 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         toolbar.setItems([flexSpace, doneBtn], animated: false)
         toolbar.sizeToFit()
         
+        print(self.locationManager.location?.coordinate.longitude as Any)
+        print(self.locationManager.location?.coordinate.latitude as Any)
+        
+        geocoder.reverseGeocodeLocation(CLLocation(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)) { (placemarks, error) in
+            
+            if let placemark = placemarks?[0] {
+                print("")
+                print(placemark.region)
+                print("")
+                print(placemark.locality)
+                print("")
+                print(placemark.subLocality)
+                print("")
+                print(placemark.country)
+                print("")
+            }
+            
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,7 +91,14 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         mapView.delegate = self
         
         mapView.showsUserLocation = true
-        mapView.setUserTrackingMode(.follow, animated: true)
+//        mapView.setUserTrackingMode(.follow, animated: true)
+        mapView.setUserTrackingMode(.follow, animated: false)
+        
+        mapView.zoomLevel = 12
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        view.willRemoveSubview(mapView)
     }
     
     @objc func doNothing(){
