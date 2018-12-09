@@ -86,6 +86,54 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
         print(self.locationManager.location?.coordinate.longitude as Any)
         print(self.locationManager.location?.coordinate.latitude as Any)
         
+        let URLString2 = "https://a9a20ecc.ngrok.io/tip/guide"
+        
+        Alamofire.request(URLString2, method: .get, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            
+            switch response.result {
+            case .success:
+                if let result = response.result.value {
+                    print("Tip")
+                    print(result)
+                    print("")
+                    let res = result as! NSDictionary
+                    UserDefaults.standard.set(res["percentage"], forKey: "tip")
+                }
+                // self.rowText = (JSON["Latitude"] as! String) + (JSON["Longitude"] as! String)
+                print("pass")
+                //                        UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
+                //                        UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
+                
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+        
+        let URLString3 = "https://a9a20ecc.ngrok.io/currency/exchangerate"
+        
+        Alamofire.request(URLString3, method: .get, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            
+            switch response.result {
+            case .success:
+                if let result = response.result.value {
+                    print("Currency")
+                    print(result)
+                    print("")
+                    let res = result as! NSDictionary
+                    UserDefaults.standard.set(res["exchangerate"], forKey: "exchange")
+                }
+                // self.rowText = (JSON["Latitude"] as! String) + (JSON["Longitude"] as! String)
+                print("pass")
+                //                        UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
+                //                        UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
+                
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+        
         geocoder.reverseGeocodeLocation(CLLocation(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)) { (placemarks, error) in
             
             if let placemark = placemarks?[0] {
@@ -151,7 +199,26 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
                                                     
                                                     let ann = MGLPointAnnotation() //RideAnnotation(coordinate: coord, title: "Ride", subtitle: "This is my ride")
                                                     ann.coordinate = coord
-                                                    ann.title = "This is an Event"
+                                                    
+                                                    var tip = ""
+                                                    var tipM = ""
+                                                    
+                                                    if newD!["does_require_tip"] as! Int == 1 {
+                                                        tip = "Yes"
+                                                        tipM = UserDefaults.standard.string(forKey: "tip")!
+                                                    } else {
+                                                        tip = "No"
+                                                    }
+                                                    
+                                                    var cost = newD!["rough_cost_estimate"] as! Double
+                                                    
+                                                    var ex = UserDefaults.standard.string(forKey: "exchange")!
+                                                    
+                                                    var conv = Double(cost) / Double(ex)!
+                                                    
+                                                    var con = String(format: "%.2f", conv) // "3.14"
+                                                    
+                                                    ann.title = "Tip: " + tip + " " + tipM + "| Cost: $" + String(describing: cost) + " £" + String(describing: con)
                                                     
                                                     //Add that annotation to the MapBox map
                                                     self.mapView.addAnnotation(ann)
@@ -185,54 +252,15 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
             
         }//end geocode
         
-        let URLString2 = "https://a9a20ecc.ngrok.io/tip/guide"
-        
-        Alamofire.request(URLString2, method: .get, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
-            
-            switch response.result {
-            case .success:
-                if let result = response.result.value {
-                    print("Tip")
-                    print(result)
-                    print("")
-                }
-                // self.rowText = (JSON["Latitude"] as! String) + (JSON["Longitude"] as! String)
-                print("pass")
-                //                        UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
-                //                        UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
-                
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
-        
-        let URLString3 = "https://a9a20ecc.ngrok.io/currency/exchangerate"
-        
-        Alamofire.request(URLString3, method: .get, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
-            
-            switch response.result {
-            case .success:
-                if let result = response.result.value {
-                    print("Currency")
-                    print(result)
-                    print("")
-                }
-                // self.rowText = (JSON["Latitude"] as! String) + (JSON["Longitude"] as! String)
-                print("pass")
-                //                        UserDefaults.standard.set(self.emailTextField.text!, forKey: "email")
-                //                        UserDefaults.standard.set(self.passwordTextField.text!, forKey: "password")
-                
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
 
     }
     
     func mapView(_ mapView: MGLMapView, tapOnCalloutFor annotation: MGLAnnotation) {
         
+    }
+    
+    func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+        return true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
