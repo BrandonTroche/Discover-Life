@@ -58,24 +58,38 @@ def location():
 
     print(data)
 
-    ret = {'res': []}
+    # ret = {'res': []}
+
+    ret = {}
 
     if(collection_events.find_one({"city":data["city"]})):
         all_in_city = collection_events.find({"city":data["city"]})
         for event in all_in_city:
             event["_id"] = "none"
-            # ret[event["event_id"]] = str(event)
-            ret['res'].append(str(event))
+            ret[event["event_id"]] = str(event)
+            # ret['res'].append(str(event))
             # ret.append(str(event))
         return(json.dumps(ret))
     return('{"status_code":400}', 400)
 
-@app.route('/check_events', methods=['GET'])
+@app.route('/new_event', methods=['POST'])
 def check_events():
-   pass
+    data = json.loads(request.data)
+    print("not found")
+    collection_events.insert_one(data)
+    return('{"status_code":200}', 200)
 
 @app.route('/cityguides/merchants', methods=['GET'])
 def cityguides_merchants():
+    # auth_head = 
+
+    # client id l7xxada69f7b2a0745b2b56715b7f1beb0c1
+    # client secret 668bcc7f91a24d80b68d3e40e392962c
+    # CITYGUIDES DCIOFFERS DCIOFFERS_POST DCILOUNGES DCILOUNGES_POST DCILOUNGES_PROVIDER_LG DCILOUNGES_PROVIDER_DCIPL DCI_ATM DCI_CURRENCYCONVERSION DCI_CUSTOMERSERVICE DCI_TIP DCIOFFERS_HEALTHCHECK
+    # https://apis.discover.com/auth/oauth/v2/token
+    # 310
+
+
     headers = {  'Accept':'application/json',  'x-dfs-api-plan':'CITYGUIDES_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
     response_body = requests.get('https://api.discover.com/cityguides/v2/merchants', headers = headers)
     return(json.dumps(response_body.text), 200)
@@ -112,9 +126,32 @@ def tip_healthcheck():
 
 @app.route('/tip/guide', methods=['GET'])
 def tip_guide():
-    headers = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_TIPETIQUETTE_SANDBOX',  'Authorization':'Bearer c2cbee55-61a6-45ec-bdfd-d26e9ade89ed'  }
-    response_body = requests.get('https://api.discover.com/dci/tip/v1/guide', headers = headers)
-    return(json.dumps(response_body.text), 200)
+    # client id l7xxada69f7b2a0745b2b56715b7f1beb0c1
+    # client secret 668bcc7f91a24d80b68d3e40e392962c
+    # CITYGUIDES DCIOFFERS DCIOFFERS_POST DCILOUNGES DCILOUNGES_POST DCILOUNGES_PROVIDER_LG DCILOUNGES_PROVIDER_DCIPL DCI_ATM DCI_CURRENCYCONVERSION DCI_CUSTOMERSERVICE DCI_TIP DCIOFFERS_HEALTHCHECK
+    # https://apis.discover.com/auth/oauth/v2/token
+    # 310
+
+    headers = {
+        'Authorization' : 'Basic bDd4eGFkYTY5ZjdiMmEwNzQ1YjJiNTY3MTViN2YxYmViMGMxOjY2OGJjYzdmOTFhMjRkODBiNjhkM2U0MGUzOTI5NjJj',
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Cache-Control': 'no-cache'
+    }
+
+    payload = "grant_type=client_credentials&scope=DCI_TIP"
+
+    res = requests.post("https://apis.discover.com/auth/oauth/v2/token", data = payload, headers = headers)
+
+    red_data = json.loads(res.text)
+
+    token = red_data["access_token"]
+
+    headers2 = {  'Accept':'application/json',  'x-dfs-api-plan':'DCI_TIPETIQUETTE_SANDBOX',  'Authorization':'Bearer '+token, 'countryisonum':'310'  }
+    # pay = "?countryisonum=310"
+    response_body = requests.get('https://api.discover.com/dci/tip/v1/guide?countryisonum=310', headers = headers2)
+    # print(json.loads(response_body.text))
+    dat = json.loads(response_body.text)
+    return('{"percentage":"' + dat[2]["tipDescription"] + '"}', 200)
 
 @app.route('/currency/healthcheck', methods=['GET'])
 def currency_healthcheck():

@@ -102,6 +102,8 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
                                             
                                             print("dict")
                                             
+                                            print(x.value)
+                                            
                                             var newS = x.value as! String
                                             newS = newS.replacingOccurrences(of: "'", with: "\"")
                                             
@@ -114,7 +116,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MGLMapVie
                                                     newD = try JSONSerialization.jsonObject(with: newData, options: []) as? [String:AnyObject] as NSDictionary?
                                                     
                                                     print(newD!["hotel_name"])
-                                                    let coord = CLLocationCoordinate2D(latitude: newD!["latitude"]! as! CLLocationDegrees, longitude: newD!["longitude"]! as! CLLocationDegrees)
+                                                    let coord = CLLocationCoordinate2D(latitude: newD!["latitude"]! as! CLLocationDegrees, longitude: newD!["longitude"] as! CLLocationDegrees)
                                                     
                                                     let ann = MGLPointAnnotation() //RideAnnotation(coordinate: coord, title: "Ride", subtitle: "This is my ride")
                                                     ann.coordinate = coord
